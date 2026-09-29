@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- themes ----------
+   Colours are "R G B" triplets used by tailwind.config.js. The default is the approved concept palette;
+   ?theme=metal / ?theme=light (set on <html data-theme> by the inline script in index.html) are the
+   new-logo candidates. --grad-v (headline text) and --grad-h (bars, buttons) are the logo's copper→gold. */
+:root{
+  --c-ink:9 9 10; --c-char:23 25 28; --c-char2:32 35 39; --c-paper:244 241 236;
+  --c-copper:217 101 43; --c-copperl:240 138 75; --c-onaccent:20 10 4;
+  --c-hi:255 255 255; --c-fg:233 230 225; --c-fg2:201 197 191; --c-fg3:214 210 204; --c-fg4:240 236 230; --c-fg5:207 202 195; --c-tech:201 193 182; --c-pts:189 184 177;
+  --c-steel:158 163 168; --c-steeld:93 97 103;
+  --c-paperink:29 31 34; --c-papermuted:85 88 92; --c-paperline:216 211 204;
+  --c-line:43 46 50; --c-line2:38 41 45; --c-line3:51 54 58; --c-line4:68 72 77; --c-line5:34 34 34; --c-boxline:71 75 80; --c-edge:255 255 255;
+}
+:root[data-theme="metal"]{
+  --c-ink:11 10 9; --c-char:22 20 18; --c-char2:31 28 25; --c-paper:233 231 227;
+  --c-copper:208 105 44; --c-copperl:240 165 90; --c-onaccent:20 10 4;
+  --c-hi:255 255 255; --c-fg:236 232 226; --c-fg2:196 193 188; --c-fg3:211 208 203; --c-fg4:242 238 232; --c-fg5:203 200 195; --c-tech:195 197 200; --c-pts:181 179 175;
+  --c-steel:166 168 171; --c-steeld:108 110 113;
+  --c-paperink:26 23 21; --c-papermuted:88 86 84; --c-paperline:208 205 200;
+  --c-line:46 42 38; --c-line2:40 37 33; --c-line3:56 52 48; --c-line4:74 70 66; --c-line5:38 35 32; --c-boxline:80 76 71; --c-edge:255 255 255;
+  --grad-v:linear-gradient(180deg,#c24e1c 0%,#e8913f 38%,#f6b866 50%,#d9722f 66%,#8a3414 100%);
+  --grad-h:linear-gradient(90deg,#d06a2e,#e89a4e 30%,#f6b866 50%,#e89a4e 70%,#d06a2e);
+}
+:root[data-theme="light"]{   /* silver grey, from the logo's silver strokes */
+  --c-ink:227 228 230; --c-char:213 215 218; --c-char2:255 255 255; --c-paper:23 25 28;
+  --c-copper:194 82 29; --c-copperl:170 70 22; --c-onaccent:20 10 4;
+  --c-hi:20 21 23; --c-fg:31 32 35; --c-fg2:63 66 71; --c-fg3:58 61 65; --c-fg4:31 32 35; --c-fg5:63 66 71; --c-tech:106 109 114; --c-pts:74 77 81;
+  --c-steel:92 96 102; --c-steeld:128 132 137;
+  --c-paperink:241 238 233; --c-papermuted:163 167 172; --c-paperline:51 54 58;   /* the paper band turns dark on this theme */
+  --c-line:198 200 204; --c-line2:203 205 208; --c-line3:191 193 197; --c-line4:179 182 186; --c-line5:201 203 206; --c-boxline:179 182 186; --c-edge:0 0 0;
+  --grad-v:linear-gradient(180deg,#a8401a 0%,#d27433 40%,#e5a04d 52%,#c05a22 68%,#7a2c10 100%);
+  --grad-h:linear-gradient(90deg,#d06a2e,#e89a4e 30%,#f6b866 50%,#e89a4e 70%,#d06a2e);
+}
+/* light / dark toggle: show the mode it switches to; no toggle on ?theme=concept; native controls follow the mode */
+:root[data-theme]{ color-scheme:dark } :root[data-theme="light"]{ color-scheme:light }
+.mode-moon{ display:none } :root[data-theme="light"] .mode-moon{ display:block } :root[data-theme="light"] .mode-sun{ display:none }
+:root:not([data-theme]) #modeToggle{ display:none }
+/* colours ease across a mode switch (class set briefly by applyTheme in motion.js) */
+.theme-anim, .theme-anim *{ transition:background-color .45s, color .45s, border-color .45s, fill .45s, stroke .45s !important }
+
+/* new-logo themes: metallic gradient on .grad text (per split char when split) and on copper fills */
+:root[data-theme] .grad:not(:has(.sp-in)), :root[data-theme] .grad .sp-in{ background-image:var(--grad-v); -webkit-background-clip:text; background-clip:text; color:transparent }
+:root[data-theme] .grad .sp-in{ padding-block:.12em; margin-block:-.12em }   /* paint area covers the whole glyph under tight leading */
+:root[data-theme] .bg-copper{ background-image:var(--grad-h) }
+:root[data-theme] a.bg-copper:hover{ filter:brightness(1.08) }
+/* light theme: white logo tiles / discs need an edge on the off-white page; lighter, more opaque glass nav */
+:root[data-theme="light"] .tile > div:first-child, :root[data-theme="light"] #pgrid .bg-white, :root[data-theme="light"] #cmiLogo{ outline:1px solid rgb(0 0 0 / .08) }
+:root[data-theme="light"] .tile, :root[data-theme="light"] #pgrid .bg-white, :root[data-theme="light"] #cmiLogo{ filter:drop-shadow(0 4px 12px rgb(0 0 0 / .08)) }
+:root[data-theme="light"] .disc{ stroke:rgb(var(--c-line4)); stroke-width:1.5px }
+:root[data-theme="light"] nav{ background-color:rgb(var(--c-char) / .9); box-shadow:0 6px 24px rgb(0 0 0 / .06) }
+
+/* --nav-h: fixed nav height, kept current by initNav() in motion.js; full-screen scenes pad by it */
+:root{ --nav-h:81px; box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px) }
+html,body{ background:rgb(var(--c-ink)) }
+body{ -webkit-font-smoothing:antialiased; overflow-x:hidden }
+.wide{ font-stretch:125% } .semi{ font-stretch:112% }
+
+/* split-text masks (src/core/text.js) */
+.sp-mask{ display:inline-block; overflow:hidden; vertical-align:top; padding:0 .02em .12em; margin-bottom:-.12em }
+.sp-in{ display:inline-block; will-change:transform }
+.sp-word{ display:inline-block; white-space:nowrap }
+
+:focus-visible{ outline:2px solid rgb(var(--c-copperl)); outline-offset:3px }
+.navlink.active{ color:rgb(var(--c-hi)) } .navlink.active::after{ transform:scaleX(1) }
+.navlink::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:1px; background:rgb(var(--c-copper)); transform:scaleX(0); transform-origin:left; transition:transform .4s }
+
+/* partner diagram lines once drawn (pathLength=1, so this dash pattern makes them pulse, as in the concept) */
+.flow{ stroke-dasharray:6 10 !important; animation:flow 1.2s linear infinite }
+@keyframes flow{ to{ stroke-dashoffset:-16 } }
+
+/* orbit tile tooltips */
+.tile .tip{ opacity:0; transform:translate(-50%,4px); transition:opacity .2s, transform .2s }
+.tile:hover .tip,.tile:focus .tip{ opacity:1; transform:translate(-50%,0) }
+
+@media (prefers-reduced-motion: reduce){ .flow{ animation:none } .navlink::after,.tile .tip{ transition:none } }

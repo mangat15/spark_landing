@@ -1,0 +1,7 @@
+﻿node_modules/
+dist/
+
+# kept local: not needed to build, and the repo is public for GitHub Pages
+reference/
+legacy/
+CLAUDE.md
