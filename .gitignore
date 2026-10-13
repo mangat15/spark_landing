@@ -1,5 +1,4 @@
-﻿node_modules/
-dist/
+node_modules/
 
 # kept local: not needed to build, and the repo is public for GitHub Pages
 reference/
