@@ -1,24 +1,25 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
-# Live at https://<user>.github.io/<repo>/ (the base path is the repo name).
-name: Deploy to GitHub Pages
+# On every push to main:
+#  - pages: builds for GitHub Pages, live at https://<user>.github.io/<repo>/ (base = repo name)
+#  - plesk: builds for a domain root and pushes ONLY the built site to the `deploy` branch,
+#           which Plesk pulls into httpdocs (one index.html at the top, nothing to configure)
+name: Deploy
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  pages:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -36,3 +37,25 @@ jobs:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  plesk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Push dist/ to the deploy branch
+        working-directory: dist
+        run: |
+          git init -q -b deploy
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Build of ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" deploy
