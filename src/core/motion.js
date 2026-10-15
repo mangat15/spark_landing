@@ -61,17 +61,14 @@ export function initNav() {
   const setNavH = () => document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
   new ResizeObserver(setNavH).observe(nav); setNavH();
 
-  // light / dark button: the visitor's choice is remembered; until they choose, follow the system setting live
-  const btn = document.getElementById('modeToggle'), sys = matchMedia('(prefers-color-scheme: light)');
-  const fixed = new URLSearchParams(location.search).has('theme');   // review links pin a theme
+  // light / dark button: light by default; the visitor's choice is remembered
+  const btn = document.getElementById('modeToggle');
   const label = () => btn.setAttribute('aria-label', theme() === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
-  const saved = () => { try { return localStorage.getItem('spark-mode'); } catch { return null; } };
   btn.addEventListener('click', () => {
     const t = theme() === 'light' ? 'metal' : 'light';
     try { localStorage.setItem('spark-mode', t === 'light' ? 'light' : 'dark'); } catch { /* private mode: just switch */ }
     applyTheme(t); label();
   });
-  sys.addEventListener('change', e => { if (theme() && !fixed && !saved()) { applyTheme(e.matches ? 'light' : 'metal'); label(); } });
   label();
 
   document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {

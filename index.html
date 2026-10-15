@@ -9,11 +9,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script>/* theme before first paint: ?theme=metal|light|concept (review links), else the visitor's saved choice, else the system setting.
+<script>/* theme before first paint: ?theme=metal|light|concept (review links), else the visitor's saved choice, else light.
    dark mode = "metal", light mode = "light"; "concept" = the original palette + old logo (no data-theme). */
 {const q=new URLSearchParams(location.search).get('theme');let t=q==='metal'||q==='light'?q:null;
 if(!t&&q!=='concept'){let s=null;try{s=localStorage.getItem('spark-mode')}catch(e){}
-t=s==='light'||s==='dark'?(s==='light'?'light':'metal'):(matchMedia('(prefers-color-scheme: light)').matches?'light':'metal')}
+t=s==='dark'?'metal':'light'}
 if(t)document.documentElement.dataset.theme=t}</script>
 <script type="module" src="/src/main.js"></script>
 </head>
